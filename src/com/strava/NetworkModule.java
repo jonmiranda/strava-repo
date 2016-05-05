@@ -16,7 +16,7 @@ public class NetworkModule {
 
   public NetworkModule() {
     segmentTargets = new ArrayList<>();
-    segmentTargets = new ArrayList<>();
+    starredSegments = new ArrayList<>();
     activities = new ArrayList<>();
   }
 
