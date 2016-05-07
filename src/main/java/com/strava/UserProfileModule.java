@@ -37,6 +37,7 @@ public class UserProfileModule {
   public static List<Integer> sortByMostCommon(List<Integer> integers) {
     HashMap<Integer, Integer> valueToCount = new HashMap<>();
     for (Integer i : integers) {
+      if (i == null) continue;
       int newValue = valueToCount.containsKey(i)
           ? valueToCount.get(i) + 1
           : 1;

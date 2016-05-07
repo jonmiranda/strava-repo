@@ -2,6 +2,7 @@ package com.strava;
 
 import com.strava.models.Activity;
 import com.strava.models.Segment;
+import com.strava.models.SegmentEffort;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -42,6 +43,7 @@ public class NetworkModule {
     }
     return br;
   }
+
   public List<Segment> getSegmentTargets(double latitude, double longitude) {
     List<Segment> segmentTargets = new ArrayList<>();
     try {
@@ -95,8 +97,47 @@ public class NetworkModule {
     return starredSegments;
   }
 
-  // TODO: used for what?
+  public Activity getActivity(String activityId) {
+    Activity activity = null;
+    try {
+      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/activities/" + activityId);
+      Optional<String> resp = br.lines().reduce(String::concat);
+      if(resp.isPresent()){
+        JSONParser parser = new JSONParser();
+        JSONObject activityObj = (JSONObject) parser.parse(resp.get());
+        JSONArray segmentEfforts = (JSONArray) activityObj.get("segment_efforts");
+        List<SegmentEffort> segmentEffortList = new ArrayList<>();
+        for (int i = 0; i < segmentEfforts.size(); ++i) {
+          JSONObject segmentEffort = (JSONObject) segmentEfforts.get(i);
+          int climbingCategory = (int) segmentEffort.getOrDefault("climb_category", 1);
+          segmentEffortList.add(new SegmentEffort(climbingCategory));
+        }
+        activity = new Activity(segmentEffortList);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return activity;
+  }
+
   public List<Activity> getActivities() {
-    return new ArrayList<>();
+    List<Activity> activities = new ArrayList<>();
+    try {
+      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/athlete/activities");
+      Optional<String> resp = br.lines().reduce(String::concat);
+      if(resp.isPresent()){
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(resp.get());
+        JSONArray json = (JSONArray)obj;
+        for(int i  = 0; i < json.size(); ++i){
+          JSONObject activity = (JSONObject)(json.get(i));
+          long id = (long) activity.get("id");
+          activities.add(getActivity("" + id));
+        }
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return activities;
   }
 }
