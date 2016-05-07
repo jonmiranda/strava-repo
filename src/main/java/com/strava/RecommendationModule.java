@@ -11,6 +11,9 @@ public class RecommendationModule {
   }
 
   public Segment getRecommendedSegment() {
-    return rankModule.getRankedSegments().get(0);
+    if(rankModule.getRankedSegments().size() > 0){
+      return rankModule.getRankedSegments().get(0);
+    }
+    return new Segment();
   }
 }
