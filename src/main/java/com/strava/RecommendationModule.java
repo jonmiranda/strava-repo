@@ -1,3 +1,7 @@
+/*Ryan Huang
+ *
+ */
+
 package com.strava;
 
 import com.strava.models.Segment;
