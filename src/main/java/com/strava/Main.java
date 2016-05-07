@@ -12,7 +12,7 @@ public class Main {
         RecommendationModule recommendationModule = new RecommendationModule(rankModule);
         recommendationModule.getRecommendedSegment();
 
-        recommendationModule.testSearch();
+        //recommendationModule.testSearch();
 
     }
 }
