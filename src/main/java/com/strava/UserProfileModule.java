@@ -34,6 +34,11 @@ public class UserProfileModule {
     return climbingCategories;
   }
 
+  public double getClimbingCategoryAverage() {
+    return 0.0;
+//    return climbingCategories.stream().mapToDouble(Integer::doubleValue).average().getAsDouble();
+  }
+
   public static List<Integer> sortByMostCommon(List<Integer> integers) {
     HashMap<Integer, Integer> valueToCount = new HashMap<>();
     for (Integer i : integers) {

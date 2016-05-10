@@ -1,15 +1,17 @@
 package com.strava.models;
 
 public class Segment {
-  private Integer climbCategory;
+
+  public double estimatedDuration;
 
   public Integer getClimbCategory() {
-    return climbCategory;
+    return climbingCategory;
   }
     public final double distance;
     public final int climbingCategory;
     public final double startLong;
     public final double startLat;
+    public double rank;
 
     public Segment(double distance, int climbingCategory, double startLong, double startLat) {
         this.distance = distance;
