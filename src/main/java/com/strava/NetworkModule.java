@@ -20,19 +20,9 @@ import java.util.Optional;
  * Network module.
  */
 public class NetworkModule {
-  private List<Segment> segmentTargets;
-  private List<Segment> starredSegments;
-  private List<Activity> activities;
   private final String authorizationValue = "Bearer 66896397d38f7d77e77189a992d871ae3d2c0f8f";
 
-
-  public NetworkModule() {
-    segmentTargets = new ArrayList<>();
-    starredSegments = new ArrayList<>();
-    activities = new ArrayList<>();
-  }
-
-  public BufferedReader getHttpResponse(String url) {
+  public BufferedReader getHttpsResponse(String url) {
     BufferedReader br = null;
     try {
       HttpsURLConnection httpsCon = (HttpsURLConnection) new URL(url).openConnection();
@@ -47,7 +37,7 @@ public class NetworkModule {
   public List<Segment> getSegmentTargets(double latitude, double longitude) {
     List<Segment> segmentTargets = new ArrayList<>();
     try {
-      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/segment_targets?latlng=[" + latitude + "," + longitude + "]&activity_type=1");
+      BufferedReader br = getHttpsResponse("https://www.strava.com/api/v3/segment_targets?latlng=[" + latitude + "," + longitude + "]&activity_type=1");
       Optional<String> resp = br.lines().reduce(String::concat);
       if(resp.isPresent()){
         JSONParser parser = new JSONParser();
@@ -61,7 +51,7 @@ public class NetworkModule {
           JSONArray startLatLang = (JSONArray)seg.get("start_latlng");
           double startLat = (double)startLatLang.get(0);
           double startLong = (double)startLatLang.get(1);
-//                  System.out.println("Segment #" + i + ": Dis: " + distance + ", CC: " + climbCategory + ", Lat: " + startLat + ", Long: " + startLong);
+          System.out.println("Segment #" + i + ": Dis: " + distance + ", CC: " + climbCategory + ", Lat: " + startLat + ", Long: " + startLong);
           segmentTargets.add(new Segment(distance, climbCategory, startLong, startLat));
         }
       }
@@ -75,7 +65,7 @@ public class NetworkModule {
   public List<Segment> getStarredSegments(int athleteId) {
     List<Segment> starredSegments = new ArrayList<>();
     try {
-      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/athletes/" + athleteId + "/segments/starred");
+      BufferedReader br = getHttpsResponse("https://www.strava.com/api/v3/athletes/" + athleteId + "/segments/starred");
       Optional<String> resp = br.lines().reduce(String::concat);
       if(resp.isPresent()){
         JSONParser parser = new JSONParser();
@@ -100,7 +90,7 @@ public class NetworkModule {
   public Activity getActivity(String activityId) {
     Activity activity = null;
     try {
-      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/activities/" + activityId);
+      BufferedReader br = getHttpsResponse("https://www.strava.com/api/v3/activities/" + activityId);
       Optional<String> resp = br.lines().reduce(String::concat);
       if(resp.isPresent()){
         JSONParser parser = new JSONParser();
@@ -123,7 +113,7 @@ public class NetworkModule {
   public List<Activity> getActivities() {
     List<Activity> activities = new ArrayList<>();
     try {
-      BufferedReader br = getHttpResponse("https://www.strava.com/api/v3/athlete/activities");
+      BufferedReader br = getHttpsResponse("https://www.strava.com/api/v3/athlete/activities");
       Optional<String> resp = br.lines().reduce(String::concat);
       if(resp.isPresent()){
         JSONParser parser = new JSONParser();

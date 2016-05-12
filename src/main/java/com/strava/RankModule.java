@@ -7,30 +7,30 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RankModule {
-
-  private final List<Segment> segmentTargets;
   List<Segment> rankedSegments;
   UserProfileModule userProfileModule;
 
-  public RankModule(List<Segment> segmentTargets, UserProfileModule userProfileModule) {
-    this.segmentTargets = segmentTargets;
+  public RankModule(UserProfileModule userProfileModule) {
     this.userProfileModule = userProfileModule;
     this.rankedSegments = new ArrayList<>();
   }
 
-  public void rank() {
+  public void rank(List<Segment> segmentTargets) {
     // TODO: Sam
+    rankedSegments.clear();
     double averageSpeed = userProfileModule.getAverageSpeed();
-    List<Integer> climbingCategories = userProfileModule.getClimbingCategories();
+//    List<Integer> climbingCategories = userProfileModule.getClimbingCategories();
+    double ccAverage = Math.max(1, userProfileModule.getClimbingCategoryAverage());
 
     double durationOfExercise = 1800; // s
     for (Segment segment : segmentTargets) {
-      double ccRank = segment.getClimbCategory() / Math.max(1, userProfileModule.getClimbingCategoryAverage()) * 100;
+      double ccRank = 1.0 - (Math.abs(1.0 - (segment.climbingCategory / ccAverage))); // 0.0 (worst) - 1.0 (best)
       double duration = segment.distance / averageSpeed;
       segment.estimatedDuration = duration;
-      System.out.println("durationOfExercise: " + durationOfExercise + "- duration: " + duration);
-      double durationRank = 1 - (Math.abs(durationOfExercise - duration) / durationOfExercise * 100);
-      segment.rank = durationRank; // (1.5 * ccRank) + durationRank;
+      double durRank = 1.0 - (Math.abs(1.0 - (duration / durationOfExercise))); // 0.0 (worst) - 1.0 (best)
+//      System.out.println("durationOfExercise: " + durationOfExercise + "- duration: " + duration);
+//      double durationRank = 1 - (Math.abs(durationOfExercise - duration) / durationOfExercise * 100);
+      segment.rank = 3 * ccRank + 2 * durRank;
     }
 
     rankedSegments.addAll(segmentTargets);
