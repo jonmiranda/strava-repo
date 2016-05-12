@@ -19,9 +19,7 @@ public class RankModule {
   }
 
   public void rank() {
-    // TODO: Sam
     double averageSpeed = userProfileModule.getAverageSpeed();
-    List<Integer> climbingCategories = userProfileModule.getClimbingCategories();
 
     double durationOfExercise = 1800; // s
     for (Segment segment : segmentTargets) {
@@ -29,7 +27,7 @@ public class RankModule {
       double duration = segment.distance / averageSpeed;
       segment.estimatedDuration = duration;
       System.out.println("durationOfExercise: " + durationOfExercise + "- duration: " + duration);
-      double durationRank = 1 - (Math.abs(durationOfExercise - duration) / durationOfExercise * 100);
+      double durationRank = Math.abs(durationOfExercise - duration) / durationOfExercise * 100;
       segment.rank = durationRank; // (1.5 * ccRank) + durationRank;
     }
 
@@ -37,7 +35,7 @@ public class RankModule {
     rankedSegments.sort(new Comparator<Segment>() {
       @Override
       public int compare(Segment o1, Segment o2) {
-        return Double.valueOf(o2.rank).compareTo(o1.rank);
+        return Double.valueOf(o1.rank).compareTo(o2.rank);
       }
     });
   }
