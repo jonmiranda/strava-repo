@@ -59,7 +59,6 @@ public class NetworkModule {
         JSONArray startLatLang = (JSONArray)seg.get("start_latlng");
         double startLat = (double)startLatLang.get(0);
         double startLong = (double)startLatLang.get(1);
-//          System.out.println("Segment #" + i + ": Dis: " + distance + ", CC: " + climbCategory + ", Lat: " + startLat + ", Long: " + startLong);
         segmentTargets.add(new Segment(distance, climbCategory, startLong, startLat));
       }
     } catch (ParseException e) {
@@ -91,6 +90,7 @@ public class NetworkModule {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+    System.out.println("Found " + starredSegments.size() + " starred segments");
     return starredSegments;
   }
 

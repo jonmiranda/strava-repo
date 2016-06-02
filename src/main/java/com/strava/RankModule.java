@@ -16,13 +16,12 @@ public class RankModule {
   }
 
   public void rank(List<Segment> segmentTargets) {
-    // TODO: Sam
     rankedSegments.clear();
     double averageSpeed = userProfileModule.getAverageSpeed();
 //    List<Integer> climbingCategories = userProfileModule.getClimbingCategories();
     double ccAverage = Math.max(1, userProfileModule.getClimbingCategoryAverage());
 
-    double durationOfExercise = 1800; // s
+    double durationOfExercise = 900; // s
     for (Segment segment : segmentTargets) {
       double ccRank = 1.0 - (Math.abs(1.0 - (segment.climbingCategory / ccAverage))); // 0.0 (worst) - 1.0 (best)
       double duration = segment.distance / averageSpeed;

@@ -2,7 +2,6 @@ package com.strava;
 
 import com.strava.models.Activity;
 import com.strava.models.Segment;
-import com.strava.models.SegmentEffort;
 
 import java.util.*;
 
@@ -62,11 +61,11 @@ public class UserProfileModule {
   private void buildProfile() {
     List<Integer> tempClimbingCategories = new ArrayList<>();
 
-    for (Activity activity: activities) {
-      for (SegmentEffort effort : activity.getSegmentEfforts()) {
-        tempClimbingCategories.add(effort.getClimbCategory());
-      }
-    }
+//    for (Activity activity: activities) {
+//      for (SegmentEffort effort : activity.getSegmentEfforts()) {
+//        tempClimbingCategories.add(effort.getClimbCategory());
+//      }
+//    }
 
     for (Segment segment : starredSegments) {
       tempClimbingCategories.add(segment.getClimbCategory());
